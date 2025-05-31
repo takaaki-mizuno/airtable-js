@@ -35,6 +35,159 @@ If you want to use it as a local file:
 
 Both methods work the same way.
 
+---
+
+## 2. Basic Usage
+
+### Initialize Client
+
+First, create an Airtable client with your Personal Access Token:
+
+```javascript
+// Initialize with token and base ID
+const airtable = new Airtable({
+  token: 'your_personal_access_token',
+  baseId: 'your_base_id'
+});
+
+// Or initialize with token only and set base later
+const airtable = new Airtable({ token: 'your_personal_access_token' });
+airtable.base('your_base_id');
+```
+
+### List Records
+
+Get records from a table:
+
+```javascript
+// Get all records from 'Tasks' table
+airtable.table('Tasks').list()
+  .then(result => {
+    console.log(result.records);
+  });
+
+// With parameters
+airtable.table('Tasks').list({
+  maxRecords: 10,
+  view: 'Grid view',
+  filterByFormula: '{Status} = "Done"'
+})
+  .then(result => {
+    console.log(result.records);
+  });
+```
+
+### Get Single Record
+
+Retrieve a specific record by ID:
+
+```javascript
+airtable.table('Tasks').get('rec123456789')
+  .then(record => {
+    console.log(record.fields);
+  });
+```
+
+### Create Record
+
+Add a new record:
+
+```javascript
+airtable.table('Tasks').create({
+  Title: 'New Task',
+  Status: 'Todo',
+  Priority: 'High'
+})
+  .then(record => {
+    console.log('Created:', record.id);
+  });
+```
+
+### Update Record
+
+Update an existing record:
+
+```javascript
+airtable.table('Tasks').update('rec123456789', {
+  Status: 'Done',
+  CompletedAt: new Date().toISOString()
+})
+  .then(record => {
+    console.log('Updated:', record.id);
+  });
+```
+
+### Delete Record
+
+Delete a record:
+
+```javascript
+airtable.table('Tasks').destroy('rec123456789')
+  .then(deletedRecord => {
+    console.log('Deleted:', deletedRecord.id);
+  });
+```
+
+### Get All Records (with automatic pagination)
+
+For large datasets, use `listAll()` to automatically handle pagination:
+
+```javascript
+airtable.table('Tasks').listAll({
+  pageSize: 100,
+  view: 'All Tasks'
+})
+  .then(allRecords => {
+    console.log(`Total records: ${allRecords.length}`);
+  });
+```
+
+---
+
+## 3. Complete Example
+
+Here's a complete HTML example:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Airtable.js Example</title>
+</head>
+<body>
+  <h1>My Tasks</h1>
+  <div id="tasks"></div>
+  
+  <script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.1.0/airtable.js"></script>
+  <script>
+    const airtable = new Airtable({
+      token: 'your_personal_access_token',
+      baseId: 'your_base_id'
+    });
+
+    // Display tasks
+    async function displayTasks() {
+      try {
+        const result = await airtable.table('Tasks').list({
+          maxRecords: 10,
+          sort: [{ field: 'Created', direction: 'desc' }]
+        });
+        
+        const tasksDiv = document.getElementById('tasks');
+        tasksDiv.innerHTML = result.records.map(record => 
+          `<div>${record.fields.Title} - ${record.fields.Status}</div>`
+        ).join('');
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    displayTasks();
+  </script>
+</body>
+</html>
+```
+
 ----
 
 <a id="japanese"></a>
@@ -72,4 +225,157 @@ HTML で次のように CDN から直接読み込めます：
 ```
 
 どちらの方法でも同じように使用できます。
+
+---
+
+## 2. 基本的な使い方
+
+### クライアントの初期化
+
+まず、Personal Access Token を使って Airtable クライアントを作成します：
+
+```javascript
+// トークンとベース ID で初期化
+const airtable = new Airtable({
+  token: 'your_personal_access_token',
+  baseId: 'your_base_id'
+});
+
+// トークンのみで初期化して、後でベースを設定
+const airtable = new Airtable({ token: 'your_personal_access_token' });
+airtable.base('your_base_id');
+```
+
+### レコード一覧の取得
+
+テーブルからレコードを取得します：
+
+```javascript
+// 'Tasks' テーブルの全レコードを取得
+airtable.table('Tasks').list()
+  .then(result => {
+    console.log(result.records);
+  });
+
+// パラメータ付きで取得
+airtable.table('Tasks').list({
+  maxRecords: 10,
+  view: 'Grid view',
+  filterByFormula: '{Status} = "Done"'
+})
+  .then(result => {
+    console.log(result.records);
+  });
+```
+
+### 単一レコードの取得
+
+ID を指定して特定のレコードを取得：
+
+```javascript
+airtable.table('Tasks').get('rec123456789')
+  .then(record => {
+    console.log(record.fields);
+  });
+```
+
+### レコードの作成
+
+新しいレコードを追加：
+
+```javascript
+airtable.table('Tasks').create({
+  Title: 'New Task',
+  Status: 'Todo',
+  Priority: 'High'
+})
+  .then(record => {
+    console.log('作成完了:', record.id);
+  });
+```
+
+### レコードの更新
+
+既存のレコードを更新：
+
+```javascript
+airtable.table('Tasks').update('rec123456789', {
+  Status: 'Done',
+  CompletedAt: new Date().toISOString()
+})
+  .then(record => {
+    console.log('更新完了:', record.id);
+  });
+```
+
+### レコードの削除
+
+レコードを削除：
+
+```javascript
+airtable.table('Tasks').destroy('rec123456789')
+  .then(deletedRecord => {
+    console.log('削除完了:', deletedRecord.id);
+  });
+```
+
+### 全レコードの取得（自動ページネーション）
+
+大量データの場合、`listAll()` を使って自動的にページネーションを処理：
+
+```javascript
+airtable.table('Tasks').listAll({
+  pageSize: 100,
+  view: 'All Tasks'
+})
+  .then(allRecords => {
+    console.log(`全レコード数: ${allRecords.length}`);
+  });
+```
+
+---
+
+## 3. 完全な使用例
+
+完全な HTML の例：
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Airtable.js Example</title>
+</head>
+<body>
+  <h1>私のタスク</h1>
+  <div id="tasks"></div>
+  
+  <script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.1.0/airtable.js"></script>
+  <script>
+    const airtable = new Airtable({
+      token: 'your_personal_access_token',
+      baseId: 'your_base_id'
+    });
+
+    // タスクを表示
+    async function displayTasks() {
+      try {
+        const result = await airtable.table('Tasks').list({
+          maxRecords: 10,
+          sort: [{ field: 'Created', direction: 'desc' }]
+        });
+        
+        const tasksDiv = document.getElementById('tasks');
+        tasksDiv.innerHTML = result.records.map(record => 
+          `<div>${record.fields.Title} - ${record.fields.Status}</div>`
+        ).join('');
+      } catch (error) {
+        console.error('エラー:', error);
+      }
+    }
+
+    displayTasks();
+  </script>
+</body>
+</html>
+```
 
