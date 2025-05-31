@@ -37,7 +37,8 @@ Both methods work the same way.
 
 ----
 
-# airtable.js — Vanilla JS Wrapper for Airtable Web API {#japanese}
+<a id="japanese"></a>
+# airtable.js — Airtable Web API用バニラ JS ラッパー
 
 **airtable.js** は、ブラウザだけで Airtable の Web API（`https://api.airtable.com/v0/`）にアクセスできる **約 2 KB** のシングルファイル JavaScript ライブラリです。  
 外部依存はありません。`<script>` タグで読み込むだけで、Personal Access Token 認証付きの CRUD（取得・追加・更新・削除）処理が行えます。
