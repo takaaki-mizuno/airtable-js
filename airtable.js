@@ -9,9 +9,27 @@
   function qs(obj) {
     if (!obj) return '';
     const esc = encodeURIComponent;
-    const pairs = Object.keys(obj)
-      .filter((k) => obj[k] !== undefined && obj[k] !== null)
-      .map((k) => `${esc(k)}=${esc(obj[k])}`);
+    const pairs = [];
+    
+    Object.keys(obj).forEach(key => {
+      const value = obj[key];
+      if (value === undefined || value === null) return;
+      
+      // sortパラメータの特別処理
+      if (key === 'sort' && Array.isArray(value)) {
+        value.forEach((sortItem, index) => {
+          if (sortItem.field) {
+            pairs.push(`sort[${index}][field]=${esc(sortItem.field)}`);
+          }
+          if (sortItem.direction) {
+            pairs.push(`sort[${index}][direction]=${esc(sortItem.direction)}`);
+          }
+        });
+      } else {
+        pairs.push(`${esc(key)}=${esc(value)}`);
+      }
+    });
+    
     return pairs.length ? `?${pairs.join('&')}` : '';
   }
 
