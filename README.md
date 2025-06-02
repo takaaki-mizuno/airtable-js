@@ -158,7 +158,7 @@ Here's a complete HTML example:
   <h1>My Tasks</h1>
   <div id="tasks"></div>
   
-  <script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.1.0/airtable.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.2.0/airtable.js"></script>
   <script>
     const airtable = new Airtable({
       token: 'your_personal_access_token',
@@ -209,7 +209,7 @@ Here's a complete HTML example:
 HTML で次のように CDN から直接読み込めます：
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.1.0/airtable.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.2.0/airtable.js"></script>
 ```
 
 ### ダウンロードして使用
