@@ -18,7 +18,7 @@ It has no external dependencies. Simply load it with a `<script>` tag to perform
 You can load directly from CDN in your HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.1.0/airtable.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.2.0/airtable.js"></script>
 ```
 
 ### Download and Use Locally
@@ -349,7 +349,7 @@ airtable.table('Tasks').listAll({
   <h1>私のタスク</h1>
   <div id="tasks"></div>
   
-  <script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.1.0/airtable.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/takaaki-mizuno/airtable-js@0.2.0/airtable.js"></script>
   <script>
     const airtable = new Airtable({
       token: 'your_personal_access_token',
